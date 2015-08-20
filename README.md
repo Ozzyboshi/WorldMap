@@ -2,6 +2,9 @@
 Worldmap is a java library for creating a sun/night world map for a specific time.
 This project is based on [This tutorial](http://www.edesign.nl/2009/05/14/math-behind-a-world-sunlight-map/), actually I translated the php code into java style classes therefore the real author is edesign.nl.
 
+WorldMap output sample
+![WorldMap output sample](https://raw.githubusercontent.com/Ozzyboshi/WorldMap/master/images/output.png)
+
 Prerequisites
 -------------
 In order to use this class you'll need 2 world png maps.
