@@ -17,19 +17,19 @@ Example
 -------------
 In this example I am going to create a new map based on the current pc date and save it.
     import java.io.File;
-  import java.io.IOException;
-  import com.ozzyboshi.worldmap.*;
-  
-  public class test {
-  	public static void main(String[] args) {
-  		try {
-  			WorldMapMaker map = new WorldMapMaker(new File("images/day.png"),new File("images/night.png"));
-  			map.BuildMapFromUnixTimestamp(System.currentTimeMillis() / 1000L);
-  			map.WriteToPNGFile(new File("images/output.png"));
-  		} catch (IOException | ImageSizeDifferentException e) {
-  			e.printStackTrace();
-  		}
-  	}
-  }
+    import java.io.IOException;
+    import com.ozzyboshi.worldmap.*;
+    
+    public class test {
+        public static void main(String[] args) {
+            try {
+                WorldMapMaker map = new WorldMapMaker(new File("images/day.png"),new File("images/night.png"));
+                map.BuildMapFromUnixTimestamp(System.currentTimeMillis() / 1000L);
+                map.WriteToPNGFile(new File("images/output.png"));
+            } catch (IOException | ImageSizeDifferentException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 If you run this code you should get a new images/output.png file with the current Sun/Night WorldMap
