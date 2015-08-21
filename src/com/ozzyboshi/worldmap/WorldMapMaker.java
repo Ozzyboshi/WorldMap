@@ -26,45 +26,37 @@ THE SOFTWARE.
 
 package com.ozzyboshi.worldmap;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import javax.imageio.ImageIO;
-
 public class WorldMapMaker {
 	
-	private BufferedImage imgDay;
-	private BufferedImage imgNight;
-	
+	private WorldMapDrawable<?> drawable;
 	private final double M_PI = Math.PI;
 	
 	private double time;
 	private int daysInYear;
 	private int dayOfYear;
 	
-	private BufferedImage destImg;
+	
 	
 	private boolean drawDuskAndDawn ;
 	private boolean printBlackPixelAtNight;
 	
-	public WorldMapMaker(File dayImage,File nightImage,boolean drawDuskAndDawn,boolean printBlackPixelAtNight) throws IOException, ImageSizeDifferentException {
-		readInputFiles(dayImage, nightImage);
+	public WorldMapMaker(WorldMapDrawable<?> drawable, boolean drawDuskAndDawn,boolean printBlackPixelAtNight) {
+		this.drawable=drawable ;
+		this.drawable.readFromFiles();
 		this.drawDuskAndDawn = drawDuskAndDawn;
 		this.printBlackPixelAtNight = printBlackPixelAtNight;
 	}
 	
-	public WorldMapMaker(File dayImage,File nightImage) throws IOException, ImageSizeDifferentException {
+	/*public WorldMapMaker(File dayImage,File nightImage) throws IOException, ImageSizeDifferentException {
 		readInputFiles(dayImage,nightImage);
 		this.drawDuskAndDawn = true;
 		printBlackPixelAtNight=false;
-	}
+	}*/
 	
 	public boolean isPrintBlackPixelAtNight() {
 		return printBlackPixelAtNight;
@@ -74,14 +66,12 @@ public class WorldMapMaker {
 		this.printBlackPixelAtNight = printBlackPixelAtNight;
 	}
 
-	private void readInputFiles(File dayImage,File nightImage) throws IOException, ImageSizeDifferentException {
-		imgDay = ImageIO.read(dayImage);
-		imgNight = ImageIO.read(nightImage);
+	//private void readInputFiles(File dayImage,File nightImage) throws IOException, ImageSizeDifferentException {
+		//imgDay = ImageIO.read(dayImage);
+		//imgNight = ImageIO.read(nightImage);
 		
-		if (imgDay.getWidth()!=imgNight.getWidth() || imgDay.getWidth()!=imgNight.getWidth()) {
-			throw new ImageSizeDifferentException();
-		}
-	}
+		
+	//}
 
 	public boolean isDrawDuskAndDawn() {
 		return drawDuskAndDawn;
@@ -91,16 +81,16 @@ public class WorldMapMaker {
 		this.drawDuskAndDawn = drawDuskAndDawn;
 	}
 
-	public BufferedImage BuildMapFromUnixTimestamp(long unixTime) {
+	public Object BuildMapFromUnixTimestamp(long unixTime) {
 		return Build(unixTime);
 	}
 	
-	public void WriteToPNGFile(File destinationFile) throws IOException {
+	/*public void WriteToPNGFile(File destinationFile) throws IOException {
 		
 		ImageIO.write(this.destImg, "PNG", destinationFile);
-	}
+	}*/
 	
-	public byte[] WriteToByteArray() throws IOException {
+	/*public byte[] WriteToByteArray() throws IOException {
 		
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ImageIO.write( this.destImg, "PNG", baos );
@@ -108,32 +98,33 @@ public class WorldMapMaker {
 		byte[] imageInByte = baos.toByteArray();
 		baos.close();
 		return imageInByte;
-	}
+	}*/
 	
-	public void WriteToPNGFile(File destinationFile,BufferedImage distImg) throws IOException {
+	/*public void WriteToPNGFile(File destinationFile,BufferedImage distImg) throws IOException {
 		
 		ImageIO.write(destImg, "PNG", destinationFile);
-	}
+	}*/
 	
-	private BufferedImage Build(long unixTime) {
+	private Object Build(long unixTime) {
 		
 		TimeCalculations(unixTime);
 		
-		destImg = new BufferedImage(imgDay.getWidth(), imgDay.getHeight(),BufferedImage.TYPE_INT_RGB);
+		//destImg = new BufferedImage(imgDay.getWidth(), imgDay.getHeight(),BufferedImage.TYPE_INT_RGB);
+		 
 		
 		Vec3 pointingFromEarthToSun = new Vec3(Math.sin((2*M_PI) * time), 0, Math.cos((2*M_PI) * time));
 		double tilt = 23.5 * Math.cos((2 * M_PI * (dayOfYear - 173)) / daysInYear);
 		Vec3 seasonOffset = new Vec3(0, Math.tan(M_PI *2* (tilt/360)), 0);
 		pointingFromEarthToSun = pointingFromEarthToSun.add(seasonOffset);
 		
-		int maxU = imgDay.getWidth();
-		int maxV=imgDay.getHeight();
+		int maxU = drawable.getWidth();
+		int maxV=drawable.getHeight();
 		int doubleMaxV = maxV * 2;
 		
 		pointingFromEarthToSun.normalize();
-		
-		for(int u = 0; u < imgDay.getWidth(); u++) {
-	        for(int v = 0; v < imgDay.getHeight(); v++) {
+		drawable.createDestinationImage();
+		for(int u = 0; u < drawable.getWidth(); u++) {
+	        for(int v = 0; v < drawable.getHeight(); v++) {
 	        	
 	        	double phi = (((double)v / (double)doubleMaxV) - 1)*(2*M_PI);
 	        	double theta = ((double)u/(double)maxU)*(2*M_PI);
@@ -150,9 +141,13 @@ public class WorldMapMaker {
 	        	// Night
 	        	if(angleBetweenSurfaceAndSunlight <= -.1) {
 	        		int rgb =0;
-	        		if (printBlackPixelAtNight==false)
-	        			rgb = imgNight.getRGB(u, v);
-	        		destImg.setRGB(u, v,rgb);
+	        		if (printBlackPixelAtNight==false) {
+	        			//rgb = imgNight.getRGB(u, v);
+	        			rgb = drawable.getNightRgbAt(u, v);
+	        		}
+	        			
+	        		//destImg.setRGB(u, v,rgb);
+	        		drawable.setDestinationRgbAt(u,v,rgb);
 	            }
 	        	// The pointingFromEarthToSun almost misses the earth
 	        	else if(drawDuskAndDawn==true && angleBetweenSurfaceAndSunlight < .1) { 
@@ -160,27 +155,34 @@ public class WorldMapMaker {
 	        		double fractionDay = (angleBetweenSurfaceAndSunlight+.1)* 5;
 	        		ArrayList<MixColor> colors = new ArrayList<MixColor>();
 	        		
-	        		MixColor color1 = new MixColor(imgDay.getRGB(u, v), fractionDay);
-	        		MixColor color2 = new MixColor(imgNight.getRGB(u, v), 1-fractionDay);
+	        		/*MixColor color1 = new MixColor(imgDay.getRGB(u, v), fractionDay);
+	        		MixColor color2 = new MixColor(imgNight.getRGB(u, v), 1-fractionDay);*/
+	        		
+	        		MixColor color1 = new MixColor(drawable.getDayRgbAt(u, v), fractionDay);
+	        		MixColor color2 = new MixColor(drawable.getNightRgbAt(u, v), 1-fractionDay);
 	        		
 	        		colors.add(color1);
 	        		colors.add(color2);
 	        		
-	        		Color color = mixColors(colors);
+	        		/*Color color = mixColors(colors);*/
 	        		
-	        		int rgb = color.getRGB();
-	        		destImg.setRGB(u, v,rgb);
+	        		/*int rgb = color.getRGB();*/
+	        		int rgb=0;
+	        		drawable.setDestinationRgbAt(u,v,rgb);
 	            }
 	        	
 	        	//Day
 	        	else {
-	        		int rgb = imgDay.getRGB(u, v);
-	        		destImg.setRGB(u, v,rgb);
+	        		//int rgb = imgDay.getRGB(u, v);
+	        		int rgb = drawable.getDayRgbAt(u, v);
+	        		drawable.setDestinationRgbAt(u,v,rgb);
+	        		//destImg.setRGB(u, v,rgb);
 	        	}
 	        		
 	        }
 		}
-		return destImg;
+		//return destImg;
+		return drawable.getDestination();
 	}
 	
 	private void TimeCalculations(long unixTime) {
@@ -201,7 +203,7 @@ public class WorldMapMaker {
 		time=time/24;
 	}
 	
-	private Color mixColors(ArrayList<MixColor> colors) {
+	/*private Color mixColors(ArrayList<MixColor> colors) {
         double shares = 0;
         int r = 0;
         int g = 0;
@@ -225,5 +227,5 @@ public class WorldMapMaker {
         b = (int) Math.round(b / shares);
         
         return new Color(r,g,b);
-    }
+    }*/
 }
