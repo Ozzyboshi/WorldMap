@@ -33,7 +33,7 @@ import java.util.TimeZone;
 
 public class WorldMapMaker {
 	
-	private WorldMapDrawable<?> drawable;
+	private WorldMapDrawable<?, ?> drawable;
 	private final double M_PI = Math.PI;
 	
 	private double time;
@@ -45,7 +45,7 @@ public class WorldMapMaker {
 	private boolean drawDuskAndDawn ;
 	private boolean printBlackPixelAtNight;
 	
-	public WorldMapMaker(WorldMapDrawable<?> drawable, boolean drawDuskAndDawn,boolean printBlackPixelAtNight) {
+	public WorldMapMaker(WorldMapDrawable<?, ?> drawable, boolean drawDuskAndDawn,boolean printBlackPixelAtNight) throws ImageSizeDifferentException {
 		this.drawable=drawable ;
 		this.drawable.readFromFiles();
 		this.drawDuskAndDawn = drawDuskAndDawn;
@@ -165,9 +165,10 @@ public class WorldMapMaker {
 	        		colors.add(color2);
 	        		
 	        		/*Color color = mixColors(colors);*/
+	        		int[] sharedColors = mixColors(colors);
 	        		
 	        		/*int rgb = color.getRGB();*/
-	        		int rgb=0;
+	        		int rgb=this.drawable.getRGB(sharedColors[0], sharedColors[1], sharedColors[2]);
 	        		drawable.setDestinationRgbAt(u,v,rgb);
 	            }
 	        	
@@ -203,7 +204,7 @@ public class WorldMapMaker {
 		time=time/24;
 	}
 	
-	/*private Color mixColors(ArrayList<MixColor> colors) {
+	private int[] mixColors(ArrayList<MixColor> colors) {
         double shares = 0;
         int r = 0;
         int g = 0;
@@ -226,6 +227,6 @@ public class WorldMapMaker {
         g = (int) Math.round(g / shares);
         b = (int) Math.round(b / shares);
         
-        return new Color(r,g,b);
-    }*/
+        return new int[] {r,g,b};
+    }
 }

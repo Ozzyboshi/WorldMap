@@ -1,18 +1,16 @@
 package com.ozzyboshi.worldmap;
 
-import java.io.File;
-import java.io.IOException;
-
-public interface WorldMapDrawable <T> {
-	public void readFromFiles();
-	public void setDayImageFile(File dayImageFile);
-	public void setNightImageFile(File dayImageFile);
+public interface WorldMapDrawable <T,RESOURCE> {
+	public void readFromFiles() throws ImageSizeDifferentException;
+	public void setDayImageFile(RESOURCE dayImageFile);
+	public void setNightImageFile(RESOURCE dayImageFile);
 	public void createDestinationImage();
 	public int getWidth();
 	public int getHeight();
 	public int getDayRgbAt(int x,int y);
 	public int getNightRgbAt(int x,int y);
 	public void setDestinationRgbAt(int x,int y,int rgb);
+	public int getRGB(int r,int g,int b);
 	
 	public T getDestination();
 		

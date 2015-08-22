@@ -17,17 +17,20 @@ public class test {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		WorldMapAwtDraw image = new WorldMapAwtDraw();
+		WorldMapDrawable<Object, Object> image = new WorldMapAwtDraw();
 		image.setDayImageFile(new File("images/day.png"));
 		image.setNightImageFile(new File("images/night.png"));
 		try {
-			WorldMapMaker maker = new WorldMapMaker(image, false, false);
+			WorldMapMaker maker = new WorldMapMaker(image, true, false);
 			maker.BuildMapFromUnixTimestamp(System.currentTimeMillis()/1000L);
-			BufferedImage output = image.getDestination();
+			BufferedImage output = (BufferedImage) image.getDestination();
 			System.out.println(output);
-			ImageIO.write(output, "PNG", new File("images/awtoutput.png"));
+			ImageIO.write(output, "PNG", new File("images/awtoutput2.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ImageSizeDifferentException e) {
 			e.printStackTrace();
 		}
 		

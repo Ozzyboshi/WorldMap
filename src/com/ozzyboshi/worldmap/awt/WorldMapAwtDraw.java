@@ -1,5 +1,6 @@
 package com.ozzyboshi.worldmap.awt;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,7 +10,7 @@ import javax.imageio.ImageIO;
 import com.ozzyboshi.worldmap.ImageSizeDifferentException;
 import com.ozzyboshi.worldmap.WorldMapDrawable;
 
-public class WorldMapAwtDraw implements WorldMapDrawable<Object> {
+public class WorldMapAwtDraw implements WorldMapDrawable<Object,Object> {
 	
 	private BufferedImage imgDay;
 	private BufferedImage imgNight;
@@ -19,7 +20,7 @@ public class WorldMapAwtDraw implements WorldMapDrawable<Object> {
 
 	// Read png files from filesystem and checks that they have the same size
 	@Override
-	public void readFromFiles() {
+	public void readFromFiles() throws ImageSizeDifferentException {
 		try {
 			imgDay = ImageIO.read(dayImageFile);
 		} catch (IOException e) {
@@ -33,7 +34,7 @@ public class WorldMapAwtDraw implements WorldMapDrawable<Object> {
 			throw new RuntimeException(e);
 		}
 		if (imgDay.getWidth()!=imgNight.getWidth() || imgDay.getWidth()!=imgNight.getWidth()) {
-			//throw new ImageSizeDifferentException();
+			throw new ImageSizeDifferentException();
 		}
 	}
 	
@@ -45,14 +46,14 @@ public class WorldMapAwtDraw implements WorldMapDrawable<Object> {
 
 	//Sets the day png file path
 	@Override
-	public void setDayImageFile(File dayImageFile) {
-		this.dayImageFile = dayImageFile;
+	public void setDayImageFile(Object dayImageFile) {
+		this.dayImageFile = (File)dayImageFile;
 	}
 
 	//Sets the night png file path
 	@Override
-	public void setNightImageFile(File nightImageFile) {
-		this.nightImageFile = nightImageFile;
+	public void setNightImageFile(Object nightImageFile) {
+		this.nightImageFile = (File)nightImageFile;
 	}
 
 	@Override
@@ -86,6 +87,10 @@ public class WorldMapAwtDraw implements WorldMapDrawable<Object> {
 		System.out.println(this.destImg);
 		return this.destImg;
 	}
-	
-	
+
+	@Override
+	public int getRGB(int r, int g, int b) {
+		Color col = new Color (r,g,b);
+		return col.getRGB();
+	}
 }
