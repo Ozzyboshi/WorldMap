@@ -1,5 +1,7 @@
 package com.ozzyboshi.worldmap;
 
+import java.io.InputStream;
+
 public interface WorldMapDrawable <T,RESOURCE> {
 	public void readFromFiles() throws ImageSizeDifferentException;
 	public void setDayImageFile(RESOURCE dayImageFile);
@@ -13,5 +15,7 @@ public interface WorldMapDrawable <T,RESOURCE> {
 	public int getRGB(int r,int g,int b);
 	
 	public T getDestination();
+	void setDayImageInputStream(InputStream ImageFile);
+	void setNightImageInputStream(InputStream dayImageStream);
 		
 }

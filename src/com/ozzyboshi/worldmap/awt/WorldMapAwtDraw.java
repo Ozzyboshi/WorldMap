@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -16,23 +17,22 @@ public class WorldMapAwtDraw implements WorldMapDrawable<Object,Object> {
 	private BufferedImage imgNight;
 	private File dayImageFile;
 	private File nightImageFile;
+	private InputStream dayImageStream;
+	private InputStream nightImageStream;
+	private boolean streamInput;
 	private BufferedImage destImg;
 
 	// Read png files from filesystem and checks that they have the same size
 	@Override
 	public void readFromFiles() throws ImageSizeDifferentException {
 		try {
-			imgDay = ImageIO.read(dayImageFile);
+			if (streamInput==true) 	{imgDay = ImageIO.read(dayImageStream);imgNight = ImageIO.read(nightImageStream);}
+			else					{imgDay = ImageIO.read(dayImageFile); imgNight = ImageIO.read(nightImageFile);}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new RuntimeException(e);
 		}
-		try {
-			imgNight = ImageIO.read(nightImageFile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException(e);
-		}
+		
 		if (imgDay.getWidth()!=imgNight.getWidth() || imgDay.getWidth()!=imgNight.getWidth()) {
 			throw new ImageSizeDifferentException();
 		}
@@ -48,12 +48,26 @@ public class WorldMapAwtDraw implements WorldMapDrawable<Object,Object> {
 	@Override
 	public void setDayImageFile(Object dayImageFile) {
 		this.dayImageFile = (File)dayImageFile;
+		streamInput=false;
+	}
+	
+	@Override
+	public void setDayImageInputStream(InputStream dayImageStream) {
+		this.dayImageStream = dayImageStream;
+		streamInput=true;
 	}
 
 	//Sets the night png file path
 	@Override
 	public void setNightImageFile(Object nightImageFile) {
 		this.nightImageFile = (File)nightImageFile;
+		streamInput=false;
+	}
+	
+	@Override
+	public void setNightImageInputStream(InputStream nightImageStream) {
+		this.nightImageStream = nightImageStream;
+		streamInput=true;
 	}
 
 	@Override

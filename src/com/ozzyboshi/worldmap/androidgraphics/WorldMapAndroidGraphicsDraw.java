@@ -1,5 +1,9 @@
 package com.ozzyboshi.worldmap.androidgraphics;
 
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
+
 import android.graphics.Bitmap;
 
 import com.ozzyboshi.worldmap.WorldMapDrawable;
@@ -17,12 +21,18 @@ public class WorldMapAndroidGraphicsDraw implements WorldMapDrawable<Object,Obje
     private Drawable dayImageDrawable;
     private Drawable nightImageDrawable;
     private Bitmap destImg;
+    @SuppressWarnings("unused")
+	private InputStream dayImageStream;
+	@SuppressWarnings("unused")
+	private InputStream nightImageStream;
+	@SuppressWarnings("unused")
+	private boolean streamInput;
 
     // Read png files from filesystem and checks that they have the same size
     @Override
     public void readFromFiles() {
-        imgDay =  ((BitmapDrawable)dayImageDrawable).getBitmap();
-        imgNight =  ((BitmapDrawable)nightImageDrawable).getBitmap();
+		imgDay =  ((BitmapDrawable)dayImageDrawable).getBitmap(); 
+		imgNight =  ((BitmapDrawable)nightImageDrawable).getBitmap();
     }
 
     // Create new image in memory with the same size of the input files
@@ -79,5 +89,17 @@ public class WorldMapAndroidGraphicsDraw implements WorldMapDrawable<Object,Obje
     public int getRGB(int r, int g, int b) {
         return Color.rgb(r,g,b);
     }
+    
+    @Override
+	public void setDayImageInputStream(InputStream dayImageStream) {
+		this.dayImageStream = dayImageStream;
+		streamInput=true;
+	}
+    
+    @Override
+	public void setNightImageInputStream(InputStream nightImageStream) {
+		this.nightImageStream = nightImageStream;
+		streamInput=true;
+	}
 
 }
