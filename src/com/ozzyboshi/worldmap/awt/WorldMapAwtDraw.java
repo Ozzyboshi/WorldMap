@@ -98,7 +98,6 @@ public class WorldMapAwtDraw implements WorldMapDrawable<Object,Object> {
 
 	@Override
 	public BufferedImage getDestination() {
-		System.out.println(this.destImg);
 		return this.destImg;
 	}
 
