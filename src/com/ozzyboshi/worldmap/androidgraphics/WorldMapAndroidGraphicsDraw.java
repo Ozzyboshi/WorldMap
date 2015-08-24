@@ -1,13 +1,8 @@
 package com.ozzyboshi.worldmap.androidgraphics;
 
 import java.io.InputStream;
-
-import javax.imageio.ImageIO;
-
 import android.graphics.Bitmap;
-
 import com.ozzyboshi.worldmap.WorldMapDrawable;
-
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
