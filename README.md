@@ -21,7 +21,7 @@ You could also get my precompiled jar file from the release section of github.
 Example
 -------------
 In this example I am going to create a new map based on the current pc date and save it as a regular PNG file on my images folder.
-    public class WorldMapCli {
+	public class WorldMapCli {
 	    public static void main(String[] args) {
     		WorldMapDrawable<Object, Object> image = new WorldMapAwtDraw();
     		image.setDayImageFile(new File("images/day.png"));
