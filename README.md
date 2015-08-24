@@ -21,6 +21,7 @@ You could also get my precompiled jar file from the release section of github.
 Example
 -------------
 In this example I am going to create a new map based on the current pc date and save it as a regular PNG file on my images folder.
+
 	public class WorldMapCli {
 	    public static void main(String[] args) {
     		WorldMapDrawable<Object, Object> image = new WorldMapAwtDraw();
@@ -43,7 +44,8 @@ In this example I am going to create a new map based on the current pc date and 
 If you run this code you should get a new images/output.png file with the current Sun/Night WorldMap
 
 You can also generate the output image from InputStream instead using the File class, just use the set(Day|Night)ImageInputStream methods instead of set(Day|Night)ImageFile, this was useful in combination with Jersey (see the demo before):
-    WorldMapDrawable<Object, Object> image = new WorldMapAwtDraw();
+
+	WorldMapDrawable<Object, Object> image = new WorldMapAwtDraw();
 	image.setDayImageInputStream(Meteo.class.getResourceAsStream("/images/day.png"));
 	image.setNightImageInputStream(Meteo.class.getResourceAsStream("/images/night.png"));
 	try {
@@ -56,14 +58,15 @@ You can also generate the output image from InputStream instead using the File c
 
 If you want to use this library for your Android project you must use android.graphics instead of awt (or at least this is what Google suggests in his own Android documentation).
 In the following example I am going to create a Bitmap (instead of an BufferedImage) that is ready to be drawn in a Canvas object.
-    Drawable day = getResources().getDrawable(R.drawable.day);
-    Drawable night = getResources().getDrawable(R.drawable.night);
-    WorldMapAndroidGraphicsDraw image = new WorldMapAndroidGraphicsDraw();
-    image.setDayImageFile(day);
-    image.setNightImageFile(night);
-    WorldMapMaker maker = new WorldMapMaker(image, true, false);
-    maker.BuildMapFromUnixTimestamp(System.currentTimeMillis() / 1000L);
-    Bitmap output = image.getDestination();
+
+	Drawable day = getResources().getDrawable(R.drawable.day);
+	Drawable night = getResources().getDrawable(R.drawable.night);
+    	WorldMapAndroidGraphicsDraw image = new WorldMapAndroidGraphicsDraw();
+    	image.setDayImageFile(day);
+    	image.setNightImageFile(night);
+    	WorldMapMaker maker = new WorldMapMaker(image, true, false);
+    	maker.BuildMapFromUnixTimestamp(System.currentTimeMillis() / 1000L);
+    	Bitmap output = image.getDestination();
     
 In all the above examples I created the WorldMapMaker object with 2 switched (true/false):
 - the first switch (second parameter) if true prints mixed pixels in the dawn/dusk zone so it is smoother.
