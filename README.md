@@ -8,7 +8,8 @@ This project is based on [This tutorial](http://www.edesign.nl/2009/05/14/math-b
 The php code in this tutorial was translated by me into java style classes, thank you edesign.nl.
 
 WorldMap output live demo
-This is a live demo of the library, this image is created dynamically with java Jersey and the WorldMap library on top of a TOMCAT 8 Java applicaton server.You can find the code in the example paragraph. 
+This is a live demo of the library, this image is created dynamically with java Jersey and the WorldMap library on top of a TOMCAT 8 Java applicaton server.You can find the code in the example paragraph.
+
 ![WorldMap demo](http://meteo.ozzyboshi.com:8082/WeatherStation/MeteoServices/Readings/WorldImage)
 
 Prerequisites
