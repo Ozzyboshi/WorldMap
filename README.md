@@ -12,7 +12,6 @@ WorldMap output live demo
 This is a live demo of the library, this image is created dynamically with java Jersey and the WorldMap library on top of a TOMCAT 8 Java applicaton server.You can find the code in the example paragraph.
 
 ![WorldMap demo](http://meteo.ozzyboshi.com:8082/WeatherStation/MeteoServices/Readings/WorldImage)
-Because Github caches the above image it's very likely is not live-updated, visit [http://meteo.ozzyboshi.com:8082/WeatherStation/MeteoServices/Readings/WorldImage](#http://meteo.ozzyboshi.com:8082/WeatherStation/MeteoServices/Readings/WorldImage) for a live version.
 
 Prerequisites
 -------------
