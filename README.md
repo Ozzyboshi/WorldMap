@@ -2,7 +2,7 @@
 Worldmap is a java library jar file for creating a sun/night world map at a specific time.
 Inside the jar file you'll find 2 packages:
 - com.ozzyboshi.worldmap.androidgraphics : meant to be used in android projects
-- com.ozzyboshi.worldmap.aawt : meant to be used in awt projects
+- com.ozzyboshi.worldmap.awt : meant to be used in awt projects
 
 This project is based on [This tutorial](http://www.edesign.nl/2009/05/14/math-behind-a-world-sunlight-map/).
 The php code in this tutorial was translated by me into java style classes, thank you edesign.nl.
@@ -62,12 +62,12 @@ In the following example I am going to create a Bitmap (instead of an BufferedIm
 
 	Drawable day = getResources().getDrawable(R.drawable.day);
 	Drawable night = getResources().getDrawable(R.drawable.night);
-    	WorldMapAndroidGraphicsDraw image = new WorldMapAndroidGraphicsDraw();
-    	image.setDayImageFile(day);
-    	image.setNightImageFile(night);
-    	WorldMapMaker maker = new WorldMapMaker(image, true, false);
-    	maker.BuildMapFromUnixTimestamp(System.currentTimeMillis() / 1000L);
-    	Bitmap output = image.getDestination();
+	WorldMapAndroidGraphicsDraw image = new WorldMapAndroidGraphicsDraw();
+	image.setDayImageFile(day);
+	image.setNightImageFile(night);
+	WorldMapMaker maker = new WorldMapMaker(image, true, false);
+	maker.BuildMapFromUnixTimestamp(System.currentTimeMillis() / 1000L);
+	Bitmap output = image.getDestination();
     
 In all the above examples I created the WorldMapMaker object with 2 switched (true/false):
 - the first switch (second parameter) if true prints mixed pixels in the dawn/dusk zone so it is smoother.
