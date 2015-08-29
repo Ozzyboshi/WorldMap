@@ -42,12 +42,14 @@ public class WorldMapMaker {
 	
 	private boolean drawDuskAndDawn ;
 	private boolean printBlackPixelAtNight;
-	
+	private boolean drawDuskAndDawnLikeNight;
+
 	public WorldMapMaker(WorldMapDrawable<?, ?> drawable, boolean drawDuskAndDawn,boolean printBlackPixelAtNight) throws ImageSizeDifferentException {
 		this.drawable=drawable ;
 		this.drawable.readFromFiles();
 		this.drawDuskAndDawn = drawDuskAndDawn;
 		this.printBlackPixelAtNight = printBlackPixelAtNight;
+		this.drawDuskAndDawnLikeNight=false;
 	}
 	
 	public boolean isPrintBlackPixelAtNight() {
@@ -101,7 +103,7 @@ public class WorldMapMaker {
 	            double angleBetweenSurfaceAndSunlight = pointingFromEarthToSun.dot(earthNormal);	            
 	        	
 	        	// Night
-	        	if(angleBetweenSurfaceAndSunlight <= -.1) {
+	        	if(angleBetweenSurfaceAndSunlight <= -.1 || (drawDuskAndDawn==false && drawDuskAndDawnLikeNight==true && angleBetweenSurfaceAndSunlight < .1)) {
 	        		int rgb =0;
 	        		if (printBlackPixelAtNight==false) {
 	        			rgb = drawable.getNightRgbAt(u, v);
@@ -181,4 +183,11 @@ public class WorldMapMaker {
         
         return new int[] {r,g,b};
     }
+	public boolean isDrawDuskAndDawnLikeNight() {
+		return drawDuskAndDawnLikeNight;
+	}
+
+	public void setDrawDuskAndDawnLikeNight(boolean drawDuskAndDawnLikeNight) {
+		this.drawDuskAndDawnLikeNight = drawDuskAndDawnLikeNight;
+	}
 }
